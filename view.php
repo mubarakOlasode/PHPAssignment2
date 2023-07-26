@@ -1,13 +1,18 @@
 <?php
 require_once ('./connection.php');
-if (!isset($_SESSION['email'])) {
-  header('Location:./signIn.php');
-} else {
-  $fetch_data = 'SELECT * from Student';
-  $res = mysqli_query($database->$connection, $fetch_data);
+// if (!isset($_SESSION['email'])) {
+//   header('Location:./signIn.php');
+// } else {
+$res = $database->fetch();
+//  }
+if (isset($_GET['deleteid'])) {
+  $delete_id = $_GET['deleteid'];
+  $res = $database->delete($delete_id);
+  while ($res) {
+    echo "<div> $res</div>";
+    break;
+  }
 }
-// $res = $database->read();
-
 ?>
 <html lang="en-US">
   <head>
@@ -15,6 +20,7 @@ if (!isset($_SESSION['email'])) {
     <title>result page</title>
     <meta name="author" content="Mubarak"/>
     <meta name="description" content="display user's information"/>
+    <script src="https://kit.fontawesome.com/8b0730a11f.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css"/>
   </head>
@@ -22,7 +28,6 @@ if (!isset($_SESSION['email'])) {
   <header>
         <?php
           include ('./global_header.php')
-
         ?>
       </header>
   <div class="container"> 
@@ -45,20 +50,22 @@ if (!isset($_SESSION['email'])) {
         $count++;
     ?>
     <tr>
-      <th scope="row"><?php echo $count ?></th>
+      <th scope="row"><?php echo $r['Id'] ?></th>
       <td><?php echo $r['fname'] ?></td>
       <td><?php echo $r['lname'] ?></td>
       <td><?php echo $r['email'] ?></td>
       <td><?php echo $r['address'] ?></td>
       <td><?php echo $r['city'] ?></td>
       <td><?php echo $r['zip'] ?></td>
-
+      <td><a href="./edit.php"><i class="fa-regular fa-pen-to-square"></i></a></td>
+      <td><a href="./view.php?deleteid=<?php echo $r['Id'] ?>"><button type="submit" class="btn"><i class="fa-solid fa-xmark"></i></button></a></td>
     </tr>
   </tbody>
-<?php
+  <?php
       }
-      ?> 
+        ?> 
 </table>
+
   </div>
   </body>
 </html>

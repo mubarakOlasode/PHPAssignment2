@@ -18,7 +18,7 @@ class Db_connection
 
     function create($fname, $lname, $email, $address, $city, $zip, $password)
     {
-        $db_sql = "INSERT INTO Student (fname,lname,email,address,city,zip,password) VALUES ('$fname','$lname','$email','$address','$city','$zip','$password')";
+        $db_sql = "INSERT INTO Student VALUES ('$fname','$lname','$email','$address','$city','$zip','$password')";
         $res = mysqli_query($this->connection, $db_sql);
         if ($res) {
             return 'Entry created';
@@ -27,17 +27,23 @@ class Db_connection
         }
     }
 
-    // function read($email, $password)
-    // {
-    //     $sql = "SELECT * FROM Student WHERE email ='$email' AND password = '$password'";
-    //     $res = mysqli_query($this->connection, $sql);
-    //     return $res;
-    // }
-    function read(){
+    function read($email, $password)
+    {
+        $sql = "SELECT * FROM Student WHERE email ='$email' AND password = '$password'";
+        $res = mysqli_query($this->connection, $sql);
+        return $res;
+    }
+    function fetch()
+    {
         $sql = "SELECT * FROM Student";
         $res = mysqli_query($this->connection, $sql);
         return $res;
+    }
 
+    function delete($id){
+        $query= "DELETE FROM Student WHERE Id= '$id'";
+        $res= mysqli_query($this->connection, $query);
+        return "The data has been succesfully deleted";
     }
 }
 
